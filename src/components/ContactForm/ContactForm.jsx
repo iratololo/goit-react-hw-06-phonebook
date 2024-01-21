@@ -1,9 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from 'nanoid';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import css from "./ContactForm.module.css"
 import { addContact } from "store/contacts/actions";
 
 export const ContactForm = () => {
+    const {contacts} = useSelector((state) => state.contacts);
     const dispatch = useDispatch();
 
     const handlerOnSubmit = (e) => {
@@ -11,9 +14,17 @@ export const ContactForm = () => {
         const name = e.target.elements.name.value;
         const number = e.target.elements.phone.value;
         const id = nanoid();
-        dispatch(addContact({name,number,id}))
-        // setName('');
-        // setNumber(''); 
+        const twin = contacts.find(({ name : user }) => user.toLowerCase() === name.toLowerCase());
+        if (twin) {
+             Report.failure(
+            'error',
+            'There is already a contact with this name',
+            'Okay',
+            );
+        } else {
+            Notify.success('A new contact is created');
+            dispatch(addContact({name,number,id}))
+        }
     }
 
   return (
