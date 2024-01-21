@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from 'nanoid';
+import { nanoid } from "@reduxjs/toolkit";
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import css from "./ContactForm.module.css"
 import { addContact } from "store/contacts/sliceContacts";
 
@@ -23,7 +24,8 @@ export const ContactForm = () => {
             );
         } else {
             Notify.success('A new contact is created');
-            dispatch(addContact({name,number,id}))
+            dispatch(addContact({ name, number, id }))
+            e.target.reset()
         }
     }
 
@@ -31,11 +33,11 @@ export const ContactForm = () => {
             <form onSubmit={handlerOnSubmit} className={css.form}>
                 <div className={css.container}>
                     <div className={css.item}>
-                        <input className={css.input} id="name" type="text" name="name" required />
+                        <input className={css.input} id="name" type="text" name="name" required autoComplete="true"/>
                         <label className={css.label} htmlFor="name">Name</label>
                     </div>
                     <div className={css.item}>
-                        <input className={css.input} id="tel" type="tel" name="phone" required />
+                        <input className={css.input} id="tel" type="tel" name="phone" required autoComplete="true"/>
                         <label className={css.label} htmlFor="tel">Number</label>
                     </div>
                 </div>
